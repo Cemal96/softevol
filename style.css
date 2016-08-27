@@ -1,0 +1,15 @@
+th span {
+  display: inline-block;
+}
+
+th span.small {
+  width: 50px;
+}
+
+th span.mid {
+  width: 100px;
+}
+
+th span.large {
+  width: 200px;
+}

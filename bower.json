@@ -1,0 +1,22 @@
+{
+  "name": "softevol",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Oleh Aloshkin <olegaleshkin@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/AleshaOleg/softevol",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "react": "^15.3.1",
+    "jquery": "^3.1.0"
+  }
+}
