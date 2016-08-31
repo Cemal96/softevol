@@ -1,26 +1,3 @@
-// var customers = [
-//   {
-//     id: 1,
-//     name: 'Oleh Aloshkin',
-//     email: 'olegaleshkin@gmail.com',
-//     phone: '+380632823381',
-//     city: 'Kiev',
-//     address: '22 Yangelya St., flat 512',
-//     state: 'Kievskaya',
-//     zip: '03056'
-//   },
-//   {
-//     id: 2,
-//     name: 'Max Bulgar',
-//     email: 'maxbulgar@gmail.com',
-//     phone: '+380681707096',
-//     city: 'Kiev',
-//     address: '22 Yangelya St., flat 512',
-//     state: 'Kievskaya',
-//     zip: '03056'
-//   }
-// ];
-
 var App = React.createClass({
   render: function() {
     return(
@@ -45,10 +22,21 @@ var Header = React.createClass({
 });
 
 var Customers = React.createClass({
-  getInitialState: function(){
+  getInitialState: function() {
+    var customers = this.localStorageUpdate();
     return {
-      customers: []
+      customers: customers
     }
+  },
+  localStorageUpdate: function() {
+    var customers = [];
+    if (localStorage.length) {
+      for (var customer = 1; customer <= localStorage.length; customer++) {
+        var currentCustomer = 'customer' + customer;
+        customers.push(JSON.parse(localStorage[currentCustomer]));
+      }
+    }
+    return customers;
   },
   collectData: function(ref, el) {
     var model = {};
@@ -59,29 +47,32 @@ var Customers = React.createClass({
     return model;
   },
   customerCreate: function(model) {
-    if (this.state.customers.length) {
-      model.id = this.state.customers.length;
+    var customers = this.localStorageUpdate();
+    if (customers.length) {
+      model.id = customers.length + 1;
     } else {
       model.id = 1;
     }
-    this.state.customers[model.id] = model;
+    localStorage.setItem("customer" + model.id, JSON.stringify(model));
+    customers = this.localStorageUpdate();
     this.setState({
-      customers: this.state.customers
+      customers: customers
     });
   },
   customerUpdate: function(model, ref, type) {
     var updated = this.collectData(ref, type);
     updated.id = model.id;
-    this.state.customers[model.id] = updated;
+    localStorage.setItem("customer" + updated.id, JSON.stringify(updated));
+    var customers = this.localStorageUpdate();
     this.setState({
-      customers: this.state.customers
+      customers: customers
     });
   },
   customerDelete: function(model) {
+    localStorage.removeItem("customer" + model.id);
+    var customers = this.localStorageUpdate();
     this.setState({
-      customers: this.state.customers.filter(function (customer) {
-        return customer.id !== model.id;
-      })
+      customers: customers
     });
   },
   render: function() {
@@ -195,7 +186,7 @@ var Customer = React.createClass({
     } else {
       customer = (
         <tr ref="updateRow">
-          <th>2</th>
+          <th>{this.props.customer.id}</th>
           <td>
             <input type="text" data-type="name" defaultValue={this.props.customer.name} className="form-control" placeholder="Name" />
           </td>
