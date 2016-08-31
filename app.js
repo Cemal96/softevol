@@ -157,12 +157,14 @@ var Customer = React.createClass({
       edit: false
     }
   },
-  toggleState: function() {
+  toggleState: function(save) {
     if (this.state.edit) {
       this.setState({
         edit: false
       });
-      this.props.customerUpdate(this.props.customer, this.refs.updateRow, 'input');
+      if (save) {
+        this.props.customerUpdate(this.props.customer, this.refs.updateRow, 'input');
+      }
       return;
     }
     this.setState({
@@ -184,7 +186,7 @@ var Customer = React.createClass({
           <td>{this.props.customer.zip}</td>
           <td>
             <div className="btn-group" role="group">
-              <button onClick={this.toggleState} className="btn btn-warning">Update</button>
+              <button onClick={() => this.toggleState(false)} className="btn btn-warning">Update</button>
               <button onClick={() => this.props.customerDelete(this.props.customer)} className="btn btn-danger">Delete</button>
             </div>
           </td>
@@ -217,8 +219,8 @@ var Customer = React.createClass({
           </td>
           <td>
             <div className="btn-group" role="group">
-              <button onClick={this.toggleState} className="btn btn-success">Save</button>
-              <button onClick={this.toggleState} className="btn btn-danger">Cancel</button>
+              <button onClick={() => this.toggleState(true)} className="btn btn-success">Save</button>
+              <button onClick={() => this.toggleState(false)} className="btn btn-danger">Cancel</button>
             </div>
           </td>
         </tr>
