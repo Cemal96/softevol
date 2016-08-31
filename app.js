@@ -23,20 +23,28 @@ var Header = React.createClass({
 
 var Customers = React.createClass({
   getInitialState: function() {
-    var customers = this.localStorageUpdate();
+    var customers = this.localStorageUpdate().customers;
     return {
       customers: customers
     }
   },
   localStorageUpdate: function() {
     var customers = [];
+    var last;
+
     if (localStorage.length) {
-      for (var customer = 1; customer <= localStorage.length; customer++) {
-        var currentCustomer = 'customer' + customer;
-        customers.push(JSON.parse(localStorage[currentCustomer]));
+      for (var key in localStorage){
+        customers.push(JSON.parse(localStorage[key]));
+        last = JSON.parse(localStorage[key]).id;
       }
+    } else {
+      last = 0;
     }
-    return customers;
+    var data = {
+      customers: customers,
+      last: last
+    };
+    return data;
   },
   collectData: function(ref, el) {
     var model = {};
@@ -47,14 +55,9 @@ var Customers = React.createClass({
     return model;
   },
   customerCreate: function(model) {
-    var customers = this.localStorageUpdate();
-    if (customers.length) {
-      model.id = customers.length + 1;
-    } else {
-      model.id = 1;
-    }
+    model.id = this.localStorageUpdate().last + 1;
     localStorage.setItem("customer" + model.id, JSON.stringify(model));
-    customers = this.localStorageUpdate();
+    var customers = this.localStorageUpdate().customers;
     this.setState({
       customers: customers
     });
@@ -63,14 +66,14 @@ var Customers = React.createClass({
     var updated = this.collectData(ref, type);
     updated.id = model.id;
     localStorage.setItem("customer" + updated.id, JSON.stringify(updated));
-    var customers = this.localStorageUpdate();
+    var customers = this.localStorageUpdate().customers;
     this.setState({
       customers: customers
     });
   },
   customerDelete: function(model) {
     localStorage.removeItem("customer" + model.id);
-    var customers = this.localStorageUpdate();
+    var customers = this.localStorageUpdate().customers;
     this.setState({
       customers: customers
     });
