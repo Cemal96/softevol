@@ -218,7 +218,7 @@ var Customer = React.createClass({
           <td>
             <div className="btn-group" role="group">
               <button onClick={this.toggleState} className="btn btn-success">Save</button>
-              <button onClick={() => this.props.customerDelete(this.props.customer)} className="btn btn-danger">Delete</button>
+              <button onClick={this.toggleState} className="btn btn-danger">Cancel</button>
             </div>
           </td>
         </tr>
